@@ -4,5 +4,9 @@ kind: Kustomization
 namespace: nats-tower-operator
 resources:
 - namespace.yaml
-- operator.serviceaccount.yaml
 - operator.deployment.yaml
+
+configMapGenerator:
+  - name: nats-tower-operator-config
+    literals:
+      - NATS_TOWER_API_TOKEN_PATH=/secrets/nats-tower-api-token

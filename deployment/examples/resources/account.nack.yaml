@@ -1,0 +1,17 @@
+---
+apiVersion: jetstream.nats.io/v1beta2
+kind: Account
+metadata:
+  name: operator
+  labels:
+    # can be omitted, if the operator has the default installation config set
+    nats-tower.com/nats-tower-installation: OC7OMSNNKRRZ3AQ3ZMBMYVDPBDI5UMFMZVJ6H4V5PNUUSM5UAB6BZFIT
+    nats-tower.com/nats-tower-secret: nack
+spec:
+  name: operator
+  servers:
+    - nats://nats:4222
+  creds:
+    secret:
+      name: nack
+    file: nats.creds

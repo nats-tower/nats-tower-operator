@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+  labels:
+    # can be omitted, if the operator has the default installation config set
+    nats-tower.com/nats-tower-installation: OC7OMSNNKRRZ3AQ3ZMBMYVDPBDI5UMFMZVJ6H4V5PNUUSM5UAB6BZFIT
+    nats-tower.com/nats-tower-account: operator
+    nats-tower.com/nats-tower-secret: mycreds
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
+      volumeMounts:
+      - name: creds
+        # this will result in a file /creds/nats.creds
+        # with the contents of the secret
+        mountPath: /creds
+  volumes:
+  - name: creds
+    secret:
+      secretName: mycreds

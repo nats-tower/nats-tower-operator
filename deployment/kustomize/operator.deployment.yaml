@@ -32,7 +32,14 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: "/config"
+            - mountPath: /secrets/nats-tower-api-token
+              name: nats-tower-operator-secrets
+              readOnly: true
+              subPath: NATS_TOWER_API_TOKEN
       volumes:
         - name: config-volume
           configMap:
             name: nats-tower-operator-config
+        - secret:
+            secretName: nats-tower-operator-secrets
+          name: nats-tower-operator-secrets
