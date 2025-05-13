@@ -340,7 +340,7 @@ func (c *NATSTowerClient) accessAllowed(ctx context.Context, clusterID, namespac
 		return false, err
 	}
 	q := req.URL.Query()
-	q.Add("filter", fmt.Sprintf("(cluster_id='%s' && namespace='%s' && account='%s')", clusterID, namespace, accountID))
+	q.Add("filter", fmt.Sprintf("(cluster='%s' && namespace='%s' && account='%s')", clusterID, namespace, accountID))
 	q.Add("perPage", "1")
 	req.URL.RawQuery = q.Encode()
 
