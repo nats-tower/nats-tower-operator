@@ -20,6 +20,7 @@ type Resource struct {
 
 type Config struct {
 	ClusterID           string
+	Namespace           string
 	ResyncInterval      uint
 	PodConfig           Resource
 	SecretConfig        Resource
@@ -33,6 +34,7 @@ type Config struct {
 // Environment variable names
 const (
 	EnvClusterID             = "NATS_TOWER_CLUSTER_ID"
+	EnvNamespace             = "NATS_TOWER_NAMESPACE"
 	EnvDefaultInstallation   = "NATS_TOWER_DEFAULT_INSTALLATION"
 	EnvInstallationsFilePath = "NATS_TOWER_INSTALLATIONS_FILE_PATH"
 	EnvTowerURL              = "NATS_TOWER_URL"
@@ -100,6 +102,7 @@ func getEnv(key, fallback string) string {
 func NewConfigFromEnv() (*Config, error) {
 	// Get configurations from environment variables
 	clusterID := getEnv(EnvClusterID, "")
+	namespace := getEnv(EnvNamespace, "")
 	defaultInstallation := getEnv(EnvDefaultInstallation, "")
 	installationsFilePath := getEnv(EnvInstallationsFilePath, DefaultInstallationsFilePath)
 	towerURL := getEnv(EnvTowerURL, DefaultTowerURL)
@@ -166,6 +169,7 @@ func NewConfigFromEnv() (*Config, error) {
 
 	return &Config{
 		ClusterID:           clusterID,
+		Namespace:           namespace,
 		DefaultInstallation: defaultInstallation,
 		ResyncInterval:      resyncInterval,
 		PodConfig:           podConfig,

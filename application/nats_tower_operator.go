@@ -77,7 +77,17 @@ func CreateNATSTowerOperator(towerOperatorConfig *config.Config,
 	}
 
 	resync := time.Minute * time.Duration(towerOperatorConfig.ResyncInterval)
-	informersFactory := dynamicinformer.NewDynamicSharedInformerFactory(k8sClient.DynamicClient, resync)
+	var informersFactory dynamicinformer.DynamicSharedInformerFactory
+	if towerOperatorConfig.Namespace != "" { // namespaced install
+		informersFactory = dynamicinformer.NewFilteredDynamicSharedInformerFactory(k8sClient.DynamicClient,
+			resync,
+			towerOperatorConfig.Namespace,
+			func(lo *v1.ListOptions) {
+
+			})
+	} else {
+		informersFactory = dynamicinformer.NewDynamicSharedInformerFactory(k8sClient.DynamicClient, resync)
+	}
 
 	broadcaster := record.NewBroadcaster()
 	broadcaster.StartLogging(klog.Infof)
