@@ -42,6 +42,7 @@ func main() {
 
 	natsTowerClient, err := natstower.CreateNATSTowerClient(context.Background(),
 		natstower.NATSTowerClientConfig{
+			ClusterID:       cfg.ClusterID,
 			NATSTowerURL:    cfg.TowerURL,
 			NATSTowerAPIKey: cfg.TowerAPIToken,
 		})
