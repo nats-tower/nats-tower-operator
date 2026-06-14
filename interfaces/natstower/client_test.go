@@ -20,7 +20,8 @@ func TestNATSTowerClient(t *testing.T) {
 		"nats://192.168.0.95:4222",
 		"test_acc",
 		"test_secret",
-		"desc")
+		"desc",
+		UserOptions{})
 	if err != nil {
 		t.Fatalf("error creating or getting user auth: %v", err)
 	}
