@@ -7,6 +7,16 @@ metadata:
     nats-tower.com/nats-tower-installation: OC7OMSNNKRRZ3AQ3ZMBMYVDPBDI5UMFMZVJ6H4V5PNUUSM5UAB6BZFIT
     nats-tower.com/nats-tower-account: operator
     nats-tower.com/nats-tower-secret: mycreds
+    # optional: bind the generated user to a NATS Tower role with scoped permissions
+    nats-tower.com/nats-tower-role: reader
+  annotations:
+    # optional: used to create the role if it does not exist yet on NATS Tower
+    # one subject per line (commas are also supported)
+    nats-tower.com/nats-tower-publish: |-
+      app.requests.>
+    nats-tower.com/nats-tower-subscribe: |-
+      app.responses.>
+      app.events.*
 spec:
   containers:
     - name: web

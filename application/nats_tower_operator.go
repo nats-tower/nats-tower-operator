@@ -40,6 +40,9 @@ const (
 	natsTowerAccountLabelKey        = "nats-tower.com/nats-tower-account"
 	natsTowerAccountTierLabelKey    = "nats-tower.com/nats-tower-account-tier"
 	natsTowerCredentialTypeLabelKey = "nats-tower.com/nats-tower-credential-type"
+	natsTowerRoleLabelKey           = "nats-tower.com/nats-tower-role"
+	natsTowerPublishAnnotationKey   = "nats-tower.com/nats-tower-publish"
+	natsTowerSubscribeAnnotationKey = "nats-tower.com/nats-tower-subscribe"
 	secretCredentialsKey            = "nats.creds"
 )
 

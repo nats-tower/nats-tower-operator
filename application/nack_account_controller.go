@@ -95,7 +95,8 @@ func getNACKAccountHandler(natsTowerOperator *NATSTowerOperator) func(ctx contex
 						installationPublicKey,
 						obj.Name, // account name is the same as the NACK account name
 						obj.Labels[natsTowerSecretLabelKey],
-						getNACKAccountUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj))
+						getNACKAccountUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj),
+						natstower.UserOptions{})
 
 					if err == natstower.ErrK8sAccessNotAllowed {
 
@@ -145,7 +146,8 @@ func getNACKAccountHandler(natsTowerOperator *NATSTowerOperator) func(ctx contex
 				installationPublicKey,
 				obj.Name, // account name is the same as the NACK account name
 				obj.Labels[natsTowerSecretLabelKey],
-				getNACKAccountUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj))
+				getNACKAccountUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj),
+				natstower.UserOptions{})
 
 			if err == natstower.ErrK8sAccessNotAllowed {
 

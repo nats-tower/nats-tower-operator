@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -78,6 +79,25 @@ func getPodHandler(natsTowerOperator *NATSTowerOperator) func(ctx context.Contex
 			return nil
 		}
 
+		// 2a. resolve the optional user role from the role label & permission annotations
+		userOptions := natstower.UserOptions{
+			Role:      obj.Labels[natsTowerRoleLabelKey],
+			Publish:   parseSubjects(obj.Annotations[natsTowerPublishAnnotationKey]),
+			Subscribe: parseSubjects(obj.Annotations[natsTowerSubscribeAnnotationKey]),
+		}
+
+		if userOptions.Role == "" && (len(userOptions.Publish) > 0 || len(userOptions.Subscribe) > 0) {
+			// Permission annotations are only meaningful together with a role label
+			natsTowerOperator.eventRecorder.Eventf(&obj,
+				corev1.EventTypeWarning,
+				"MissingRoleLabel",
+				"Require label %s when annotations %s or %s are set",
+				natsTowerRoleLabelKey,
+				natsTowerPublishAnnotationKey,
+				natsTowerSubscribeAnnotationKey)
+			return nil
+		}
+
 		// 3. check which type of credentials is required
 		credentialType := "user"
 		if obj.Labels[natsTowerCredentialTypeLabelKey] != "" {
@@ -107,7 +127,8 @@ func getPodHandler(natsTowerOperator *NATSTowerOperator) func(ctx context.Contex
 						installationPublicKey,
 						account,
 						obj.Labels[natsTowerSecretLabelKey],
-						getPodUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj))
+						getPodUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj),
+						userOptions)
 
 					if err == natstower.ErrK8sAccessNotAllowed {
 
@@ -156,7 +177,8 @@ func getPodHandler(natsTowerOperator *NATSTowerOperator) func(ctx context.Contex
 				installationPublicKey,
 				account,
 				obj.Labels[natsTowerSecretLabelKey],
-				getPodUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj))
+				getPodUserDescription(natsTowerOperator.towerOperatorConfig.ClusterID, &obj),
+				userOptions)
 
 			if err == natstower.ErrK8sAccessNotAllowed {
 
@@ -191,4 +213,31 @@ func getPodHandler(natsTowerOperator *NATSTowerOperator) func(ctx context.Contex
 			creds,
 			secret)
 	}
+}
+
+// parseSubjects splits a role permission annotation value into a list of NATS
+// subjects. Values may be separated by newlines or commas; empty entries and
+// surrounding whitespace are dropped.
+func parseSubjects(value string) []string {
+	if value == "" {
+		return nil
+	}
+
+	fields := strings.FieldsFunc(value, func(r rune) bool {
+		return r == '\n' || r == ',' || r == '\r'
+	})
+
+	subjects := make([]string, 0, len(fields))
+	for _, field := range fields {
+		field = strings.TrimSpace(field)
+		if field != "" {
+			subjects = append(subjects, field)
+		}
+	}
+
+	if len(subjects) == 0 {
+		return nil
+	}
+
+	return subjects
 }
