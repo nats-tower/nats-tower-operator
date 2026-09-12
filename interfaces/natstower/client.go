@@ -127,7 +127,6 @@ func (c *NATSTowerClient) doJSONRequest(ctx context.Context,
 var (
 	ErrOperatorNotFound    = fmt.Errorf("operator not found")
 	ErrAccountNotFound     = fmt.Errorf("account not found")
-	ErrAccountTierNotFound = fmt.Errorf("account tier not found")
 	ErrUserNotFound        = fmt.Errorf("user not found")
 	ErrRoleNotFound        = fmt.Errorf("role not found")
 	ErrK8sAccessNotAllowed = fmt.Errorf("k8s access not allowed")

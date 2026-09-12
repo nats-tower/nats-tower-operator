@@ -13,7 +13,13 @@ A kubernetes operator to automatically inject credentials into workloads
 | NATS_TOWER_API_TOKEN               | Tower API token                                                  | Yes (if NATS_TOWER_API_TOKEN_PATH not set) |
 | NATS_TOWER_API_TOKEN_PATH          | Path to file containing Tower API token                          | Yes (if NATS_TOWER_API_TOKEN not set)      |
 | NATS_TOWER_RESYNC_INTERVAL         | Resync interval in minutes                                       | No (defaults to 0)                         |
-| Resource selectors (optional)      | NATS_TOWER_POD_CONFIG_KIND, NATS_TOWER_POD_CONFIG_SELECTOR, etc. | No                                         |
+| NATS_TOWER_NAMESPACE               | Namespace to restrict the operator to (namespaced installs only) | No                                         |
+| NATS_TOWER_POD_CONFIG_KIND         | Kind filter for the pod informer                                 | No                                         |
+| NATS_TOWER_POD_CONFIG_SELECTOR     | Label selector filter for the pod informer                       | No                                         |
+| NATS_TOWER_SECRET_CONFIG_KIND      | Kind filter for the secret informer                              | No                                         |
+| NATS_TOWER_SECRET_CONFIG_SELECTOR  | Label selector filter for the secret informer                    | No                                         |
+| NATS_TOWER_NACK_CONFIG_KIND        | Kind filter for the NACK account informer                        | No                                         |
+| NATS_TOWER_NACK_CONFIG_SELECTOR    | Label selector filter for the NACK account informer              | No                                         |
 
 ## Pod labels & annotations
 
